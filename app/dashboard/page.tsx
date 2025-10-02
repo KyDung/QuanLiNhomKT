@@ -1,34 +1,40 @@
-"use client"
+"use client";
 
-import { useAuth } from "@/lib/auth-context"
-import { useRouter } from "next/navigation"
-import { useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { LogOut, User, Wallet, Receipt, QrCode } from "lucide-react"
-import ProfileSettings from "@/components/profile-settings"
-import ExpenseManager from "@/components/expense-manager"
-import QRCodeManager from "@/components/qrcode-manager"
+import { useAuth } from "@/lib/auth-context";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LogOut, User, Wallet, Receipt, QrCode } from "lucide-react";
+import ProfileSettings from "@/components/profile-settings";
+import ExpenseManager from "@/components/expense-manager";
+import QRCodeManager from "@/components/qrcode-manager";
 
 export default function DashboardPage() {
-  const { currentUser, logout } = useAuth()
-  const router = useRouter()
+  const { currentUser, logout } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     if (!currentUser) {
-      router.push("/")
+      router.push("/");
     }
-  }, [currentUser, router])
+  }, [currentUser, router]);
 
   if (!currentUser) {
-    return null
+    return null;
   }
 
   const handleLogout = () => {
-    logout()
-    router.push("/")
-  }
+    logout();
+    router.push("/");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100">
@@ -40,8 +46,12 @@ export default function DashboardPage() {
               <Wallet className="h-6 w-6 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-foreground">Quản lý chi tiêu</h1>
-              <p className="text-sm text-muted-foreground">Xin chào, {currentUser.displayName}</p>
+              <h1 className="text-2xl font-bold text-foreground">
+                Quản lý chi tiêu
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Xin chào, {currentUser.displayName}
+              </p>
             </div>
           </div>
           <Button variant="outline" onClick={handleLogout}>
@@ -50,19 +60,27 @@ export default function DashboardPage() {
           </Button>
         </div>
 
-        {/* Balance Card */}
+        {/* Admin Info Card */}
         <Card className="mb-6 bg-primary text-primary-foreground">
           <CardHeader>
-            <CardTitle>Số dư hiện tại</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <User className="h-5 w-5" />
+              Thông tin quản trị viên
+            </CardTitle>
             <CardDescription className="text-primary-foreground/80">
-              {(currentUser.balance || 0) >= 0 ? "Bạn đang được nợ" : "Bạn đang nợ"}
+              Tài khoản hiện tại
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-4xl font-bold">
-              {(currentUser.balance || 0) >= 0 ? "+" : ""}
-              {(currentUser.balance || 0).toLocaleString("vi-VN")} đ
-            </p>
+            <div className="space-y-2">
+              <p className="text-2xl font-bold">{currentUser.displayName}</p>
+              <p className="text-primary-foreground/90">
+                Username: {currentUser.username}
+              </p>
+              <p className="text-sm text-primary-foreground/70">
+                ID: {currentUser.id}
+              </p>
+            </div>
           </CardContent>
         </Card>
 
@@ -97,5 +115,5 @@ export default function DashboardPage() {
         </Tabs>
       </div>
     </div>
-  )
+  );
 }
